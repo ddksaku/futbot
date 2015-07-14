@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FutbotModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SecurityQuestion" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Coin" Type="int" />
+          <Property Name="ConnectionStatus" Type="bit" />
+          <Property Name="SearchStatus" Type="bit" />
+        </EntityType>
+        <EntityType Name="CardItems">
+          <Key>
+            <PropertyRef Name="CardItemId" />
+          </Key>
+          <Property Name="CardItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CardTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Image" Type="image" />
+        </EntityType>
+        <EntityType Name="Cards">
+          <Key>
+            <PropertyRef Name="CardId" />
+          </Key>
+          <Property Name="CardId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CardTypeId" Type="int" Nullable="false" />
+          <Property Name="ChemistryModId" Type="int" />
+          <Property Name="PositionId" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="BuyPrice" Type="int" />
+          <Property Name="SellPrice" Type="int" />
+          <Property Name="MaxPrice" Type="int" />
+          <Property Name="BuyPercent" Type="int" />
+          <Property Name="SellPercent" Type="int" />
+          <Property Name="AverageValue" Type="int" />
+          <Property Name="SearchStatus" Type="bit" />
+          <Property Name="UpdateStatus" Type="bit" />
+          <Property Name="ExcessivePercent" Type="int" />
+          <Property Name="MaxPriceModifierPercent" Type="int" />
+        </EntityType>
+        <EntityType Name="CardTypes">
+          <Key>
+            <PropertyRef Name="CardTypeId" />
+          </Key>
+          <Property Name="CardTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScriptQueues">
+          <Key>
+            <PropertyRef Name="ScriptQueueId" />
+          </Key>
+          <Property Name="ScriptQueueId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="int" Nullable="false" />
+          <Property Name="ScriptName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="RequestTime" Type="datetime" Nullable="false" />
+          <Property Name="FinishTime" Type="datetime" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="AgentId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_CardItems_CardTypes">
+          <End Role="CardTypes" Type="Self.CardTypes" Multiplicity="1" />
+          <End Role="CardItems" Type="Self.CardItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardTypes">
+              <PropertyRef Name="CardTypeId" />
+            </Principal>
+            <Dependent Role="CardItems">
+              <PropertyRef Name="CardTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_ChemistryMods">
+          <End Role="CardItems" Type="Self.CardItems" Multiplicity="0..1" />
+          <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardItems">
+              <PropertyRef Name="CardItemId" />
+            </Principal>
+            <Dependent Role="Cards">
+              <PropertyRef Name="ChemistryModId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Positions">
+          <End Role="CardItems" Type="Self.CardItems" Multiplicity="0..1" />
+          <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardItems">
+              <PropertyRef Name="CardItemId" />
+            </Principal>
+            <Dependent Role="Cards">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScriptQueues_Accounts">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="1" />
+          <End Role="ScriptQueues" Type="Self.ScriptQueues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="ScriptQueues">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FutbotModelStoreContainer">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardItems" EntityType="Self.CardItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cards" EntityType="Self.Cards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardTypes" EntityType="Self.CardTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScriptQueues" EntityType="Self.ScriptQueues" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CardItems_CardTypes" Association="Self.FK_CardItems_CardTypes">
+            <End Role="CardTypes" EntitySet="CardTypes" />
+            <End Role="CardItems" EntitySet="CardItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_ChemistryMods" Association="Self.FK_Cards_ChemistryMods">
+            <End Role="CardItems" EntitySet="CardItems" />
+            <End Role="Cards" EntitySet="Cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Positions" Association="Self.FK_Cards_Positions">
+            <End Role="CardItems" EntitySet="CardItems" />
+            <End Role="Cards" EntitySet="Cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScriptQueues_Accounts" Association="Self.FK_ScriptQueues_Accounts">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="ScriptQueues" EntitySet="ScriptQueues" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FutbotModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="FutbotEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="FutbotModel.Account" />
+          <EntitySet Name="CardItems" EntityType="FutbotModel.CardItem" />
+          <EntitySet Name="Cards" EntityType="FutbotModel.Card" />
+          <EntitySet Name="CardTypes" EntityType="FutbotModel.CardType" />
+          <AssociationSet Name="FK_CardItems_CardTypes" Association="FutbotModel.FK_CardItems_CardTypes">
+            <End Role="CardType" EntitySet="CardTypes" />
+            <End Role="CardItem" EntitySet="CardItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_ChemistryMods" Association="FutbotModel.FK_Cards_ChemistryMods">
+            <End Role="CardItem" EntitySet="CardItems" />
+            <End Role="Card" EntitySet="Cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Positions" Association="FutbotModel.FK_Cards_Positions">
+            <End Role="CardItem" EntitySet="CardItems" />
+            <End Role="Card" EntitySet="Cards" />
+          </AssociationSet>
+          <EntitySet Name="ScriptQueues" EntityType="FutbotModel.ScriptQueue" />
+          <AssociationSet Name="FK_ScriptQueues_Accounts" Association="FutbotModel.FK_ScriptQueues_Accounts">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="ScriptQueue" EntitySet="ScriptQueues" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityQuestion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Coin" Type="Int32" />
+          <Property Name="ConnectionStatus" Type="Boolean" />
+          <Property Name="SearchStatus" Type="Boolean" />
+          <NavigationProperty Name="ScriptQueues" Relationship="FutbotModel.FK_ScriptQueues_Accounts" FromRole="Account" ToRole="ScriptQueue" />
+        </EntityType>
+        <EntityType Name="CardItem">
+          <Key>
+            <PropertyRef Name="CardItemId" />
+          </Key>
+          <Property Name="CardItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="CardType" Relationship="FutbotModel.FK_CardItems_CardTypes" FromRole="CardItem" ToRole="CardType" />
+          <NavigationProperty Name="Cards" Relationship="FutbotModel.FK_Cards_ChemistryMods" FromRole="CardItem" ToRole="Card" />
+          <NavigationProperty Name="Cards1" Relationship="FutbotModel.FK_Cards_Positions" FromRole="CardItem" ToRole="Card" />
+        </EntityType>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="CardId" />
+          </Key>
+          <Property Name="CardId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ChemistryModId" Type="Int32" />
+          <Property Name="PositionId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BuyPrice" Type="Int32" />
+          <Property Name="SellPrice" Type="Int32" />
+          <Property Name="MaxPrice" Type="Int32" />
+          <Property Name="BuyPercent" Type="Int32" />
+          <Property Name="SellPercent" Type="Int32" />
+          <Property Name="AverageValue" Type="Int32" />
+          <Property Name="SearchStatus" Type="Boolean" />
+          <Property Name="UpdateStatus" Type="Boolean" />
+          <Property Name="ExcessivePercent" Type="Int32" />
+          <Property Name="MaxPriceModifierPercent" Type="Int32" />
+          <NavigationProperty Name="ChemistryMod" Relationship="FutbotModel.FK_Cards_ChemistryMods" FromRole="Card" ToRole="CardItem" />
+          <NavigationProperty Name="Position" Relationship="FutbotModel.FK_Cards_Positions" FromRole="Card" ToRole="CardItem" />
+        </EntityType>
+        <EntityType Name="CardType">
+          <Key>
+            <PropertyRef Name="CardTypeId" />
+          </Key>
+          <Property Name="CardTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CardItems" Relationship="FutbotModel.FK_CardItems_CardTypes" FromRole="CardType" ToRole="CardItem" />
+        </EntityType>
+        <Association Name="FK_CardItems_CardTypes">
+          <End Type="FutbotModel.CardType" Role="CardType" Multiplicity="1" />
+          <End Type="FutbotModel.CardItem" Role="CardItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardType">
+              <PropertyRef Name="CardTypeId" />
+            </Principal>
+            <Dependent Role="CardItem">
+              <PropertyRef Name="CardTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_ChemistryMods">
+          <End Type="FutbotModel.CardItem" Role="CardItem" Multiplicity="0..1" />
+          <End Type="FutbotModel.Card" Role="Card" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardItem">
+              <PropertyRef Name="CardItemId" />
+            </Principal>
+            <Dependent Role="Card">
+              <PropertyRef Name="ChemistryModId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Positions">
+          <End Type="FutbotModel.CardItem" Role="CardItem" Multiplicity="0..1" />
+          <End Type="FutbotModel.Card" Role="Card" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CardItem">
+              <PropertyRef Name="CardItemId" />
+            </Principal>
+            <Dependent Role="Card">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ScriptQueue">
+          <Key>
+            <PropertyRef Name="ScriptQueueId" />
+          </Key>
+          <Property Name="ScriptQueueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int32" Nullable="false" />
+          <Property Name="ScriptName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="RequestTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FinishTime" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="AgentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="FutbotModel.FK_ScriptQueues_Accounts" FromRole="ScriptQueue" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_ScriptQueues_Accounts">
+          <End Type="FutbotModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="FutbotModel.ScriptQueue" Role="ScriptQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="ScriptQueue">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FutbotModelStoreContainer" CdmEntityContainer="FutbotEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="FutbotModel.Account">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="SearchStatus" ColumnName="SearchStatus" />
+                <ScalarProperty Name="ConnectionStatus" ColumnName="ConnectionStatus" />
+                <ScalarProperty Name="Coin" ColumnName="Coin" />
+                <ScalarProperty Name="SecurityQuestion" ColumnName="SecurityQuestion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardItems">
+            <EntityTypeMapping TypeName="FutbotModel.CardItem">
+              <MappingFragment StoreEntitySet="CardItems">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CardTypeId" ColumnName="CardTypeId" />
+                <ScalarProperty Name="CardItemId" ColumnName="CardItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cards">
+            <EntityTypeMapping TypeName="FutbotModel.Card">
+              <MappingFragment StoreEntitySet="Cards">
+                <ScalarProperty Name="MaxPriceModifierPercent" ColumnName="MaxPriceModifierPercent" />
+                <ScalarProperty Name="ExcessivePercent" ColumnName="ExcessivePercent" />
+                <ScalarProperty Name="UpdateStatus" ColumnName="UpdateStatus" />
+                <ScalarProperty Name="SearchStatus" ColumnName="SearchStatus" />
+                <ScalarProperty Name="AverageValue" ColumnName="AverageValue" />
+                <ScalarProperty Name="SellPercent" ColumnName="SellPercent" />
+                <ScalarProperty Name="BuyPercent" ColumnName="BuyPercent" />
+                <ScalarProperty Name="MaxPrice" ColumnName="MaxPrice" />
+                <ScalarProperty Name="SellPrice" ColumnName="SellPrice" />
+                <ScalarProperty Name="BuyPrice" ColumnName="BuyPrice" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+                <ScalarProperty Name="ChemistryModId" ColumnName="ChemistryModId" />
+                <ScalarProperty Name="CardTypeId" ColumnName="CardTypeId" />
+                <ScalarProperty Name="CardId" ColumnName="CardId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardTypes">
+            <EntityTypeMapping TypeName="FutbotModel.CardType">
+              <MappingFragment StoreEntitySet="CardTypes">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CardTypeId" ColumnName="CardTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScriptQueues">
+            <EntityTypeMapping TypeName="FutbotModel.ScriptQueue">
+              <MappingFragment StoreEntitySet="ScriptQueues">
+                <ScalarProperty Name="AgentId" ColumnName="AgentId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="ScriptName" ColumnName="ScriptName" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="ScriptQueueId" ColumnName="ScriptQueueId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

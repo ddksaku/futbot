@@ -1,0 +1,35 @@
+﻿<Window x:Class="FutbotUI.Views.AccountDetailView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ViewModels="clr-namespace:FutbotUI.ViewModels"
+        xmlns:Utils="clr-namespace:FutbotUI.Utils"
+        Title="Account detail" Height="160" Width="300"
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize">        
+    
+    <StackPanel Margin="5,15,5,0"> 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>        
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>            
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="E-mail" Margin="5"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Email, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Password" Margin="5"/>
+            <PasswordBox Grid.Row="1" Grid.Column="1" Utils:PasswordHelper.Attach="True" Utils:PasswordHelper.Password="{Binding Password, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>            
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Security Question" Margin="5"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SecurityQuestion, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Content="{Binding ErrorMessage}" Foreground="Red" FontStyle="Italic"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" IsDefault="True" Command="{Binding OkButtonCommand}" Width="50" Margin="10,0,0,0"/>
+            <Button Content="Cancel" IsCancel="True" Width="50" Margin="10,0,0,0"/>            
+        </StackPanel>
+    </StackPanel>
+</Window>

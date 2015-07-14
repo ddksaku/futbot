@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b8fcfc890cb34311b25db38e437e7f62" Name="Diagram1">
+        <EntityTypeShape EntityType="FutbotModel.Account" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="FutbotModel.CardItem" Width="1.5" PointX="3" PointY="1.875" />
+        <EntityTypeShape EntityType="FutbotModel.Card" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="FutbotModel.CardType" Width="1.5" PointX="0.75" PointY="2.125" />
+        <AssociationConnector Association="FutbotModel.FK_CardItems_CardTypes" />
+        <AssociationConnector Association="FutbotModel.FK_Cards_ChemistryMods" />
+        <AssociationConnector Association="FutbotModel.FK_Cards_Positions" />
+        <EntityTypeShape EntityType="FutbotModel.ScriptQueue" Width="1.5" PointX="3.375" PointY="4.5" />
+        <AssociationConnector Association="FutbotModel.FK_ScriptQueues_Accounts" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,109 @@
+﻿<Window x:Class="FutbotUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ViewModels="clr-namespace:FutbotUI.ViewModels"
+        Title="Futbot" Height="800" Width="1400"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <DataTemplate x:Key="AccountCellTemplate">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Edit" Command="{Binding Path=DataContext.OpenEditAccountWindowCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="70" Margin="3,0,0,0"/>
+                <Button Content="Delete" Command="{Binding Path=DataContext.DeleteAccountCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="70" Margin="3,0,0,0"/>
+                <Button Content="Test account" Command="{Binding Path=DataContext.TestAccountCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="70" Margin="3,0,0,0"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CardCellTemplate">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Edit" Command="{Binding Path=DataContext.OpenEditCardWindowCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="50" Margin="3,0,0,0"/>
+                    <Button Content="Delete" Command="{Binding Path=DataContext.DeleteCardCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="50" Margin="3,0,0,0"/>
+                    <Button Content="Check Buy/Sell Price" Command="{Binding Path=DataContext.CheckBuySellPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="110" Margin="3,0,0,0"/>
+                    <Button Content="Check Max. Price" Command="{Binding Path=DataContext.CheckMaxPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Width="110" Margin="3,0,0,0"/>
+                    <CheckBox Content="Avoid excessive increase" Width="140" Margin="3,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <TabControl>
+            <!-- Account Management -->
+            <TabItem Header="Account Management">
+                <TabItem.DataContext>
+                    <ViewModels:AccountManagementViewModel/>
+                </TabItem.DataContext>
+
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,10">
+                        <Button Content="Add" Command="{Binding OpenAddAccountWindowCommand}" Width="100" Margin="10,0,0,0" Height="40"/>
+                        <Button Content="Bulk upload" Command="{Binding BulkUploadAccountsCommand}" Width="100" Margin="10,0,0,0" Height="40"/>
+                        <Button Content="Test all accounts" Command="{Binding TestAllAccountsCommand}" Width="100" Margin="10,0,0,0" Height="40"/>
+                    </StackPanel>
+                    <DataGrid IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding AccountId}" Width="1*"></DataGridTextColumn>
+                            <!--<DataGridHyperlinkColumn Header="E-MAIL" Binding="{Binding Email}" Width="4*"></DataGridHyperlinkColumn>-->
+                            <DataGridTextColumn Header="E-mail" Binding="{Binding Email}" Width="4*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="3*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Sec. Question" Binding="{Binding SecurityQuestion}" Width="5*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Connect" Binding="{Binding ConnectionStatus}" Width="2*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Search" Binding="{Binding SearchStatus}" Width="2*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Coins" Binding="{Binding Coin}" Width="2*"></DataGridTextColumn>
+                            <DataGridTemplateColumn CellTemplate="{StaticResource AccountCellTemplate}" Width="220"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <!-- -->
+            <TabItem Header="Card Management">
+                <TabItem.DataContext>
+                    <ViewModels:CardManagementViewModel/>
+                </TabItem.DataContext>
+
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,10">
+                        <Button Content="Add" Command="{Binding OpenAddCardWindowCommand}" Width="100" Margin="10,0,0,0"/>
+                        <Button Content="Delete all cards" Command="{Binding DeleteAllCardsCommand}" Width="100" Margin="10,0,0,0"/>
+                        <Button Content="Check all Buy/Sell prices" Command="{Binding CheckAllBuySellPricesCommand}" Width="130" Margin="10,0,0,0"/>
+                        <Button Content="Check all Max. prices" Command="{Binding CheckAllMaxPricesCommand}" Width="130" Margin="10,0,0,0"/>
+                        <GroupBox Width="200" Margin="10,0,0,0">
+                            <GroupBox.Header>
+                                <CheckBox Content="Auto update"/>
+                            </GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Update every" Margin="10,0,0,0"></TextBlock>
+                                <ComboBox Margin="10,0,10,0">                                                                        
+                                </ComboBox>
+                                <TextBlock Text="minutes" Margin="0,0,10,0"></TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+                        <Button Content="Price validation" Command="{Binding PriceValidationCommand}" Width="100" Margin="10,0,0,0"/>
+                        <Button Content="Import" Command="{Binding ImportCardsCommand}" Width="100" Margin="10,0,0,0"/>
+                        <Button Content="Export" Command="{Binding ExportCardsCommand}" Width="100" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <DataGrid IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Cards}" SelectedItem="{Binding SelectedCard}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Card" Binding="{Binding Name}" Width="8*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Chemistry Mod" Binding="{Binding ChemistryMod.Name}" Width="6*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Position" Binding="{Binding Position.Name}" Width="4*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Buy" Binding="{Binding BuyPrice}" Width="2.3*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Sell" Binding="{Binding SellPrice}" Width="2.3*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Max Price" Binding="{Binding MaxPrice}" Width="4.1*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Buy %" Binding="{Binding BuyPercent}" Width="3.2*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Sell %" Binding="{Binding SellPercent}" Width="3.2*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Avg. No" Binding="{Binding AverageValue}" Width="4*"></DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="No Search" Binding="{Binding SearchStatus}" Width="5*"></DataGridCheckBoxColumn>
+                            <DataGridCheckBoxColumn Header="No Update" Binding="{Binding UpdateStatus}" Width="5*"></DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Excessive %" Binding="{Binding ExcessivePercent}" Width="5*"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Max. Price %" Binding="{Binding MaxPriceModifierPercent}" Width="5.2*"></DataGridTextColumn>
+                            <DataGridTemplateColumn CellTemplate="{StaticResource CardCellTemplate}" Width="475"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
